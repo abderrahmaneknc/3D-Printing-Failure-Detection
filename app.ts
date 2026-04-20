@@ -6,6 +6,7 @@ import partRoutes from "./src/routes/part.routes";
 import tagRoutes from "./src/routes/tag.routes";
 import gCodeCmdRoutes from "./src/routes/gCodeCmd.routes";  
 import commandLogRouter from "./src/routes/cmdLogs.routes";
+import maintenanceLogRouter from "./src/routes/maintenanceLog.routes";
 const app = express();
 
 app.use(cors());
@@ -17,4 +18,5 @@ app.use("/api/parts", partRoutes);
 app.use("/api/tags", tagRoutes);
 app.use("/api/gcode-commands", gCodeCmdRoutes);
 app.use("/api/command-logs", commandLogRouter);
+app.use("/api/maintenance-logs", maintenanceLogRouter);
 export default app;
