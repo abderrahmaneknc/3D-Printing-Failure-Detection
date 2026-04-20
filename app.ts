@@ -7,6 +7,7 @@ import tagRoutes from "./src/routes/tag.routes";
 import gCodeCmdRoutes from "./src/routes/gCodeCmd.routes";  
 import commandLogRouter from "./src/routes/cmdLogs.routes";
 import maintenanceLogRouter from "./src/routes/maintenanceLog.routes";
+import filamentProfileRoutes from "./src/routes/filamentProfile.routes";
 const app = express();
 
 app.use(cors());
@@ -19,4 +20,5 @@ app.use("/api/tags", tagRoutes);
 app.use("/api/gcode-commands", gCodeCmdRoutes);
 app.use("/api/command-logs", commandLogRouter);
 app.use("/api/maintenance-logs", maintenanceLogRouter);
+app.use("/api/filament-profiles", filamentProfileRoutes);
 export default app;
