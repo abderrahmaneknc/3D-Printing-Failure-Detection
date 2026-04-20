@@ -4,6 +4,7 @@ import printerRoutes from "./src/routes/printer.routes";
 import printJobRoutes from "./src/routes/printJob.routes";
 import partRoutes from "./src/routes/part.routes";
 import tagRoutes from "./src/routes/tag.routes";
+import gCodeCmdRoutes from "./src/routes/gCodeCmd.routes";
 const app = express();
 
 app.use(cors());
@@ -13,4 +14,5 @@ app.use("/api/printers", printerRoutes);
 app.use("/api/print-jobs", printJobRoutes);
 app.use("/api/parts", partRoutes);
 app.use("/api/tags", tagRoutes);
+app.use("/api/gcode-commands", gCodeCmdRoutes);
 export default app;
