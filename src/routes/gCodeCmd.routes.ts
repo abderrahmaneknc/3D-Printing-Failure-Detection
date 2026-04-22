@@ -8,5 +8,89 @@ router.get("/", ctrl.getGcodeCommands);
 router.get("/:id", ctrl.getGcodeCommandById);
 router.put("/:id", ctrl.updateGcodeCommand);
 router.delete("/:id", ctrl.deleteGcodeCommand);
-
+/**
+ * @swagger
+ * tags:
+ *   name: Gcode Commands
+ *   description: Gcode command management
+ *
+ * /gcode-commands:
+ *   get:
+ *     summary: Get all gcode commands
+ *     tags: [Gcode Commands]
+ *     responses:
+ *       200:
+ *         description: List of gcode commands
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/GcodeCommand'
+ *   post:
+ *     summary: Create a gcode command
+ *     tags: [Gcode Commands]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, command]
+ *             properties:
+ *               name: { type: string, example: "Home All" }
+ *               command: { type: string, example: "G28" }
+ *     responses:
+ *       201:
+ *         description: Command created
+ *
+ * /gcode-commands/{id}:
+ *   get:
+ *     summary: Get gcode command by ID
+ *     tags: [Gcode Commands]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Command found
+ *       404:
+ *         description: Command not found
+ *   put:
+ *     summary: Update a gcode command
+ *     tags: [Gcode Commands]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name: { type: string }
+ *               command: { type: string }
+ *     responses:
+ *       200:
+ *         description: Command updated
+ *   delete:
+ *     summary: Delete a gcode command
+ *     tags: [Gcode Commands]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Command deleted
+ */
 export default router;

@@ -8,5 +8,104 @@ router.get("/", ctrl.getInventories);
 router.get("/:id", ctrl.getInventoryById);
 router.put("/:id", ctrl.updateInventory);
 router.delete("/:id", ctrl.deleteInventory);
-
+/**
+ * @swagger
+ * tags:
+ *   name: Inventory
+ *   description: Inventory management
+ *
+ * /inventory:
+ *   get:
+ *     summary: Get all inventory entries
+ *     tags: [Inventory]
+ *     responses:
+ *       200:
+ *         description: List of inventory entries
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Inventory'
+ *   post:
+ *     summary: Create an inventory entry
+ *     tags: [Inventory]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [profile, orderNumber, updateType, quantity, date]
+ *             properties:
+ *               profile:
+ *                 type: object
+ *                 properties:
+ *                   connect:
+ *                     type: object
+ *                     properties:
+ *                       id: { type: string, example: "uuid-of-profile" }
+ *               orderNumber: { type: string, example: "ORD-2024-001" }
+ *               updateType: { type: string, enum: [ORDER, REDUCTION] }
+ *               quantity: { type: integer, example: 3 }
+ *               totalCost: { type: number, example: 45.99 }
+ *               date: { type: string, format: date-time, example: "2024-01-15T10:00:00.000Z" }
+ *     responses:
+ *       201:
+ *         description: Inventory entry created
+ *
+ * /inventory/{id}:
+ *   get:
+ *     summary: Get inventory entry by ID
+ *     tags: [Inventory]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Inventory entry found
+ *       404:
+ *         description: Inventory entry not found
+ *   put:
+ *     summary: Update an inventory entry
+ *     tags: [Inventory]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               orderNumber: { type: string }
+ *               updateType: { type: string, enum: [ORDER, REDUCTION] }
+ *               quantity: { type: integer }
+ *               totalCost: { type: number }
+ *               date: { type: string, format: date-time }
+ *     responses:
+ *       200:
+ *         description: Inventory entry updated
+ *   delete:
+ *     summary: Delete an inventory entry
+ *     tags: [Inventory]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Inventory entry deleted
+ *       404:
+ *         description: Inventory entry not found
+ */
 export default router;
