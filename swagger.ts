@@ -10,7 +10,7 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "https://your-app.up.railway.app",
+        url: "https://3d-printing-failure-detection-production.up.railway.app/",
         description: "Local server",
       },
     ],
