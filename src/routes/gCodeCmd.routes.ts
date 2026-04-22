@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.deleteGcodeCommand);
  *   name: Gcode Commands
  *   description: Gcode command management
  *
- * /gcode-commands:
+ * /api/gcode-commands:
  *   get:
  *     summary: Get all gcode commands
  *     tags: [Gcode Commands]
@@ -44,7 +44,7 @@ router.delete("/:id", ctrl.deleteGcodeCommand);
  *       201:
  *         description: Command created
  *
- * /gcode-commands/{id}:
+ * /api/gcode-commands/{id}:
  *   get:
  *     summary: Get gcode command by ID
  *     tags: [Gcode Commands]

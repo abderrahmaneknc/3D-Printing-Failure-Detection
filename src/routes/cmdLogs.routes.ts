@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.deleteCommandLog);
  *   name: Command Logs
  *   description: Command log management
  *
- * /command-logs:
+ * /api/command-logs:
  *   get:
  *     summary: Get all command logs
  *     tags: [Command Logs]
@@ -58,7 +58,7 @@ router.delete("/:id", ctrl.deleteCommandLog);
  *       201:
  *         description: Command log created
  *
- * /command-logs/{id}:
+ * /api/command-logs/{id}:
  *   get:
  *     summary: Get command log by ID
  *     tags: [Command Logs]

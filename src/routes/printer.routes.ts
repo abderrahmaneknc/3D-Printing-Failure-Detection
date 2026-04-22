@@ -21,7 +21,7 @@ router.delete("/:id", controller.deletePrinter);
  *   name: Printers
  *   description: Printer management
  *
- * /printers:
+ * /api/printers:
  *   get:
  *     summary: Get all printers
  *     tags: [Printers]
@@ -62,7 +62,7 @@ router.delete("/:id", controller.deletePrinter);
  *             schema:
  *               $ref: '#/components/schemas/Printer'
  *
- * /printers/{id}:
+ * /api/printers/{id}:
  *   get:
  *     summary: Get printer by ID
  *     tags: [Printers]
@@ -120,7 +120,7 @@ router.delete("/:id", controller.deletePrinter);
  *       404:
  *         description: Printer not found
  *
- * /printers/{printerId}/tags:
+ * /api/printers/{printerId}/tags:
  *   get:
  *     summary: Get all tags for a printer
  *     tags: [Printers]
@@ -157,7 +157,7 @@ router.delete("/:id", controller.deletePrinter);
  *       409:
  *         description: Tag already assigned
  *
- * /printers/{printerId}/tags/{tagId}:
+ * /api/printers/{printerId}/tags/{tagId}:
  *   delete:
  *     summary: Remove a tag from a printer
  *     tags: [Printers]
@@ -178,7 +178,7 @@ router.delete("/:id", controller.deletePrinter);
  *       404:
  *         description: Tag not assigned
  *
- * /printers/{printerId}/command-logs:
+ * /api/printers/{printerId}/command-logs:
  *   get:
  *     summary: Get command logs for a printer
  *     tags: [Printers]
@@ -192,7 +192,7 @@ router.delete("/:id", controller.deletePrinter);
  *       200:
  *         description: List of command logs
  *
- * /printers/{printerId}/maintenance-logs:
+ * /api/printers/{printerId}/maintenance-logs:
  *   get:
  *     summary: Get maintenance logs for a printer
  *     tags: [Printers]

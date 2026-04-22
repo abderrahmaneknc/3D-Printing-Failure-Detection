@@ -17,7 +17,7 @@ router.delete("/:id", ctrl.deleteFilamentProfile);
  *   name: Filament Profiles
  *   description: Filament profile management
  *
- * /filament-profiles:
+ * /api/filament-profiles:
  *   get:
  *     summary: Get all filament profiles
  *     tags: [Filament Profiles]
@@ -49,7 +49,7 @@ router.delete("/:id", ctrl.deleteFilamentProfile);
  *       201:
  *         description: Filament profile created
  *
- * /filament-profiles/{id}:
+ * /api/filament-profiles/{id}:
  *   get:
  *     summary: Get filament profile by ID
  *     tags: [Filament Profiles]
@@ -97,7 +97,7 @@ router.delete("/:id", ctrl.deleteFilamentProfile);
  *       404:
  *         description: Filament profile not found
  *
- * /filament-profiles/{profileId}/inventory:
+ * /api/filament-profiles/{profileId}/inventory:
  *   get:
  *     summary: Get inventory by filament profile
  *     tags: [Filament Profiles]

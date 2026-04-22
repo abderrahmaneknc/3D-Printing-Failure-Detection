@@ -21,7 +21,7 @@ router.delete("/:id", ctrl.deleteJob);
  *   name: Print Jobs
  *   description: Print job lifecycle management
  *
- * /print-jobs:
+ * /api/print-jobs:
  *   get:
  *     summary: Get all print jobs
  *     tags: [Print Jobs]
@@ -52,7 +52,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       201:
  *         description: Print job created
  *
- * /print-jobs/{id}:
+ * /api/print-jobs/{id}:
  *   get:
  *     summary: Get print job by ID
  *     tags: [Print Jobs]
@@ -80,7 +80,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       200:
  *         description: Print job deleted
  *
- * /print-jobs/{id}/start:
+ * /api/print-jobs/{id}/start:
  *   post:
  *     summary: Start a queued print job
  *     tags: [Print Jobs]
@@ -96,7 +96,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       400:
  *         description: Job is not queued
  *
- * /print-jobs/{id}/pause:
+ * /api/print-jobs/{id}/pause:
  *   post:
  *     summary: Pause a printing job
  *     tags: [Print Jobs]
@@ -112,7 +112,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       400:
  *         description: Job is not printing
  *
- * /print-jobs/{id}/resume:
+ * /api/print-jobs/{id}/resume:
  *   post:
  *     summary: Resume a paused job
  *     tags: [Print Jobs]
@@ -128,7 +128,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       400:
  *         description: Job is not paused
  *
- * /print-jobs/{id}/cancel:
+ * /api/print-jobs/{id}/cancel:
  *   post:
  *     summary: Cancel a job
  *     tags: [Print Jobs]
@@ -144,7 +144,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       400:
  *         description: Job cannot be cancelled
  *
- * /print-jobs/{id}/fail:
+ * /api/print-jobs/{id}/fail:
  *   post:
  *     summary: Mark a job as failed
  *     tags: [Print Jobs]
@@ -158,7 +158,7 @@ router.delete("/:id", ctrl.deleteJob);
  *       200:
  *         description: Job marked as failed
  *
- * /print-jobs/{id}/progress:
+ * /api/print-jobs/{id}/progress:
  *   patch:
  *     summary: Update job progress
  *     tags: [Print Jobs]

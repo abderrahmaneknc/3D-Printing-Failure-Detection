@@ -9,7 +9,7 @@ const router = Router({ mergeParams: true });
  *   name: Printer Tags
  *   description: Assign and remove tags from printers
  *
- * /printers/{printerId}/tags:
+ * /api/printers/{printerId}/tags:
  *   get:
  *     summary: Get all tags for a printer
  *     tags: [Printer Tags]
@@ -65,7 +65,7 @@ const router = Router({ mergeParams: true });
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *
- * /printers/{printerId}/tags/{tagId}:
+ * /api/printers/{printerId}/tags/{tagId}:
  *   delete:
  *     summary: Remove a tag from a printer
  *     tags: [Printer Tags]

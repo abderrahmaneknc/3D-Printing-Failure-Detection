@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.deleteTag);
  *   name: Tags
  *   description: Tag management
  *
- * /tags:
+ * /api/tags:
  *   get:
  *     summary: Get all tags
  *     tags: [Tags]
@@ -48,7 +48,7 @@ router.delete("/:id", ctrl.deleteTag);
  *             schema:
  *               $ref: '#/components/schemas/Tag'
  *
- * /tags/{id}:
+ * /api/tags/{id}:
  *   get:
  *     summary: Get tag by ID
  *     tags: [Tags]

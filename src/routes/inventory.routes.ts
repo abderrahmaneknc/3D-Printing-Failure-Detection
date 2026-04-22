@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.deleteInventory);
  *   name: Inventory
  *   description: Inventory management
  *
- * /inventory:
+ * /api/inventory:
  *   get:
  *     summary: Get all inventory entries
  *     tags: [Inventory]
@@ -54,7 +54,7 @@ router.delete("/:id", ctrl.deleteInventory);
  *       201:
  *         description: Inventory entry created
  *
- * /inventory/{id}:
+ * /api/inventory/{id}:
  *   get:
  *     summary: Get inventory entry by ID
  *     tags: [Inventory]

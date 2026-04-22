@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.deleteMaintenanceLog);
  *   name: Maintenance Logs
  *   description: Maintenance log management
  *
- * /maintenance-logs:
+ * /api/maintenance-logs:
  *   get:
  *     summary: Get all maintenance logs
  *     tags: [Maintenance Logs]
@@ -52,7 +52,7 @@ router.delete("/:id", ctrl.deleteMaintenanceLog);
  *       201:
  *         description: Maintenance log created
  *
- * /maintenance-logs/{id}:
+ * /api/maintenance-logs/{id}:
  *   get:
  *     summary: Get maintenance log by ID
  *     tags: [Maintenance Logs]

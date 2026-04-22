@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.remove);
  *   name: Parts
  *   description: Part/file management
  *
- * /parts:
+ * /api/parts:
  *   get:
  *     summary: Get all parts
  *     tags: [Parts]
@@ -47,7 +47,7 @@ router.delete("/:id", ctrl.remove);
  *       201:
  *         description: Part created
  *
- * /parts/{id}:
+ * /api/parts/{id}:
  *   get:
  *     summary: Get part by ID
  *     tags: [Parts]
