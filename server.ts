@@ -1,8 +1,12 @@
 import app from "./app";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger";
-const PORT = process.env.PORT || 3000;
+import cors from "cors";
 
+const PORT = process.env.PORT || 3000;
+app.use(cors({
+  origin: "*", // later you can restrict to your frontend URL
+}));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
