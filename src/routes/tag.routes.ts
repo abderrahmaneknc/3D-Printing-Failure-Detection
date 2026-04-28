@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", ctrl.createTag);
 router.get("/", ctrl.getTags);
+router.delete("/", ctrl.deleteManyTags);
 router.get("/:id", ctrl.getTagById);
 router.put("/:id", ctrl.updateTag);
 router.delete("/:id", ctrl.deleteTag);
@@ -47,6 +48,37 @@ router.delete("/:id", ctrl.deleteTag);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Tag'
+ *   delete:
+ *     summary: Delete multiple tags
+ *     tags: [Tags]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Tags deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/tags/{id}:
  *   get:

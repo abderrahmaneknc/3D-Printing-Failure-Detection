@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import * as service from "../services/cmdLogs.service";
 
 type IdParam = { id: string };
+type IdsParam = { id: string[] };
+
 type PrinterParam = { printerId: string };
 
 const handleError = (res: any, error: unknown) => {
@@ -65,5 +67,22 @@ export const deleteCommandLog: RequestHandler<IdParam> = async (req, res) => {
     res.json(data);
   } catch (error) {
     handleError(res, error);
+  }
+};
+
+export const deleteManyCommandLogs :RequestHandler<IdsParam[]   >= async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyCommandLogsService(ids);
+
+    return res.status(200).json({
+      message: "Command logs deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
   }
 };

@@ -41,3 +41,20 @@ export const getTagsForPrinter: RequestHandler<PrinterParam> = async (req, res) 
     handleError(res, error);
   }
 };
+
+export const deleteManyPrinterTags: RequestHandler = async (req, res) => {
+  try {
+    const { pairs } = req.body;
+
+    const result = await service.deleteManyPrinterTagsService(pairs);
+
+    return res.status(200).json({
+      message: "Printer tags deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};

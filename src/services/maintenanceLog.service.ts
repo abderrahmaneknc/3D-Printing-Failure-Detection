@@ -53,3 +53,19 @@ export const deleteMaintenanceLog = async (id: string) => {
 
   return prisma.maintenanceLog.delete({ where: { id } });
 };
+
+export const deleteManyMaintenanceLogsService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  const result = await prisma.maintenanceLog.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

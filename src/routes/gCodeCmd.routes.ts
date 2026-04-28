@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", ctrl.createGcodeCommand);
 router.get("/", ctrl.getGcodeCommands);
+router.delete("/", ctrl.deleteManyGcodeCommands);
 router.get("/:id", ctrl.getGcodeCommandById);
 router.put("/:id", ctrl.updateGcodeCommand);
 router.delete("/:id", ctrl.deleteGcodeCommand);
@@ -43,6 +44,37 @@ router.delete("/:id", ctrl.deleteGcodeCommand);
  *     responses:
  *       201:
  *         description: Command created
+ *   delete:
+ *     summary: Delete multiple gcode commands
+ *     tags: [Gcode Commands]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Commands deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/gcode-commands/{id}:
  *   get:

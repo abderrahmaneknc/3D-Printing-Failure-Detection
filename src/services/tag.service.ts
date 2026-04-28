@@ -48,3 +48,27 @@ export const deleteTag = async (id: string) => {
 
   return prisma.tag.delete({ where: { id } });
 };
+
+export const deleteManyTagsService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  await prisma.printerTag.deleteMany({
+    where: {
+      tagId: {
+        in: ids,
+      },
+    },
+  });
+
+  const result = await prisma.tag.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

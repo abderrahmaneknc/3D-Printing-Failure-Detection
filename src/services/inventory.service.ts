@@ -53,3 +53,19 @@ export const deleteInventory = async (id: string) => {
 
   return prisma.inventory.delete({ where: { id } });
 };
+
+export const deleteManyInventoriesService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  const result = await prisma.inventory.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

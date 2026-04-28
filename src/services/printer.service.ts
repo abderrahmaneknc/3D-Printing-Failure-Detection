@@ -38,3 +38,51 @@ export const deletePrinter = async (id: string) => {
 
   return prisma.printer.delete({ where: { id } });
 };
+
+export const deleteManyPrintersService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  await prisma.printJob.deleteMany({
+    where: {
+      printerId: {
+        in: ids,
+      },
+    },
+  });
+
+  await prisma.commandLog.deleteMany({
+    where: {
+      printerId: {
+        in: ids,
+      },
+    },
+  });
+
+  await prisma.maintenanceLog.deleteMany({
+    where: {
+      printerId: {
+        in: ids,
+      },
+    },
+  });
+
+  await prisma.printerTag.deleteMany({
+    where: {
+      printerId: {
+        in: ids,
+      },
+    },
+  });
+
+  const result = await prisma.printer.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

@@ -57,3 +57,20 @@ export const deleteFilamentProfile: RequestHandler<IdParam> = async (req, res) =
     handleError(res, error);
   }
 };
+
+export const deleteManyFilamentProfiles: RequestHandler = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyFilamentProfilesService(ids);
+
+    return res.status(200).json({
+      message: "Filament profiles deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};

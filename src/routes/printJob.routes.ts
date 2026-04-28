@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", ctrl.createJob);
 router.get("/", ctrl.getAllJobs);
+router.delete("/", ctrl.deleteManyJobs);
 router.get("/:id", ctrl.getJobById);
 
 router.post("/:id/start", ctrl.startJob);
@@ -51,6 +52,37 @@ router.delete("/:id", ctrl.deleteJob);
  *     responses:
  *       201:
  *         description: Print job created
+ *   delete:
+ *     summary: Delete multiple print jobs
+ *     tags: [Print Jobs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Print jobs deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/print-jobs/{id}:
  *   get:

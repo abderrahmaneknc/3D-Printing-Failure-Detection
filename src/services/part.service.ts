@@ -52,3 +52,27 @@ export const deletePart = async (id: string) => {
     where: { id },
   });
 };
+
+export const deleteManyPartsService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  await prisma.printJob.deleteMany({
+    where: {
+      fileId: {
+        in: ids,
+      },
+    },
+  });
+
+  const result = await prisma.part.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

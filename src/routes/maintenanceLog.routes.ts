@@ -5,6 +5,7 @@ const router = Router({ mergeParams: true });
 
 router.post("/", ctrl.createMaintenanceLog);
 router.get("/", ctrl.getMaintenanceLogs);
+router.delete("/", ctrl.deleteManyMaintenanceLogs);
 router.get("/:id", ctrl.getMaintenanceLogById);
 router.put("/:id", ctrl.updateMaintenanceLog);
 router.delete("/:id", ctrl.deleteMaintenanceLog);
@@ -51,6 +52,37 @@ router.delete("/:id", ctrl.deleteMaintenanceLog);
  *     responses:
  *       201:
  *         description: Maintenance log created
+ *   delete:
+ *     summary: Delete multiple maintenance logs
+ *     tags: [Maintenance Logs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Maintenance logs deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/maintenance-logs/{id}:
  *   get:

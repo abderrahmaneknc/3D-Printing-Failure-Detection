@@ -38,3 +38,26 @@ export const getTagsForPrinter = async (printerId: string) => {
     include: { tag: true },
   });
 };
+
+export const deleteManyPrinterTagsService = async (printerTagPairs: { printerId: string; tagId: string }[]) => {
+  if (!printerTagPairs || printerTagPairs.length === 0) {
+    throw new Error("No printer-tag pairs provided");
+  }
+
+  let deletedCount = 0;
+  for (const pair of printerTagPairs) {
+    try {
+      await prisma.printerTag.delete({
+        where: {
+          printerId_tagId: pair,
+        },
+      });
+      deletedCount++;
+    } catch (error) {
+      // Record doesn't exist, skip it
+      continue;
+    }
+  }
+
+  return { count: deletedCount };
+};
