@@ -5,6 +5,7 @@ const router = Router({ mergeParams: true });
 
 router.post("/", ctrl.createInventory);
 router.get("/", ctrl.getInventories);
+router.delete("/", ctrl.deleteManyInventories);
 router.get("/:id", ctrl.getInventoryById);
 router.put("/:id", ctrl.updateInventory);
 router.delete("/:id", ctrl.deleteInventory);
@@ -53,6 +54,37 @@ router.delete("/:id", ctrl.deleteInventory);
  *     responses:
  *       201:
  *         description: Inventory entry created
+ *   delete:
+ *     summary: Delete multiple inventory entries
+ *     tags: [Inventory]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Inventory entries deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/inventory/{id}:
  *   get:

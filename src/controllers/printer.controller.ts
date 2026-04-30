@@ -57,3 +57,20 @@ export const deletePrinter: RequestHandler<IdParam> = async (req, res) => {
     handleError(res, error);
   }
 };
+
+export const deleteManyPrinters: RequestHandler = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyPrintersService(ids);
+
+    return res.status(200).json({
+      message: "Printers deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};

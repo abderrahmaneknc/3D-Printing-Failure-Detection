@@ -67,3 +67,20 @@ export const deleteInventory: RequestHandler<IdParam> = async (req, res) => {
     handleError(res, error);
   }
 };
+
+export const deleteManyInventories: RequestHandler = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyInventoriesService(ids);
+
+    return res.status(200).json({
+      message: "Inventories deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};

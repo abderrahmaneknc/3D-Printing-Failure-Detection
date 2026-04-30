@@ -40,3 +40,27 @@ export const deleteFilamentProfile = async (id: string) => {
 
   return prisma.filamentProfile.delete({ where: { id } });
 };
+
+export const deleteManyFilamentProfilesService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  await prisma.inventory.deleteMany({
+    where: {
+      profileId: {
+        in: ids,
+      },
+    },
+  });
+
+  const result = await prisma.filamentProfile.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

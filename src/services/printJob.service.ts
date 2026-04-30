@@ -227,3 +227,19 @@ export const failJob = async (id: string) => {
 export const deletePrintJob = (id: string) => {
   return prisma.printJob.delete({ where: { id } });
 };
+
+export const deleteManyPrintJobsService = async (ids: string[]) => {
+  if (!ids || ids.length === 0) {
+    throw new Error("No IDs provided");
+  }
+
+  const result = await prisma.printJob.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  return result;
+};

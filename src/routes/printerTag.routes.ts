@@ -65,6 +65,57 @@ const router = Router({ mergeParams: true });
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *
+ *   delete:
+ *     summary: Delete multiple printer-tag associations
+ *     tags: [Printer Tags]
+ *     parameters:
+ *       - in: path
+ *         name: printerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "uuid-of-printer"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - pairs
+ *             properties:
+ *               pairs:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required: [printerId, tagId]
+ *                   properties:
+ *                     printerId: { type: string, example: "uuid-of-printer" }
+ *                     tagId: { type: string, example: "uuid-of-tag" }
+ *                 example:
+ *                   - printerId: "uuid1"
+ *                     tagId: "uuid-tag1"
+ *                   - printerId: "uuid1"
+ *                     tagId: "uuid-tag2"
+ *     responses:
+ *       200:
+ *         description: Tags successfully removed from printers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
  * /api/printers/{printerId}/tags/{tagId}:
  *   delete:
  *     summary: Remove a tag from a printer
@@ -95,6 +146,7 @@ const router = Router({ mergeParams: true });
 
 router.get("/", ctrl.getTagsForPrinter);
 router.post("/", ctrl.addTagToPrinter);
+router.delete("/", ctrl.deleteManyPrinterTags);
 router.delete("/:tagId", ctrl.removeTagFromPrinter);
 
 export default router;

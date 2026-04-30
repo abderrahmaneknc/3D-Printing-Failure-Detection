@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/", ctrl.createFilamentProfile);
 router.get("/", ctrl.getFilamentProfiles);
+router.delete("/", ctrl.deleteManyFilamentProfiles);
 router.use("/:profileId/inventory", inventoryRouter); 
 
 router.get("/:id", ctrl.getFilamentProfileById);
@@ -48,6 +49,37 @@ router.delete("/:id", ctrl.deleteFilamentProfile);
  *     responses:
  *       201:
  *         description: Filament profile created
+ *   delete:
+ *     summary: Delete multiple filament profiles
+ *     tags: [Filament Profiles]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Filament profiles deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/filament-profiles/{id}:
  *   get:

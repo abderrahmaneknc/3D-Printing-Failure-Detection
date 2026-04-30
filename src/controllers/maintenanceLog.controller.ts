@@ -67,3 +67,20 @@ export const deleteMaintenanceLog: RequestHandler<IdParam> = async (req, res) =>
     handleError(res, error);
   }
 };
+
+export const deleteManyMaintenanceLogs: RequestHandler = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyMaintenanceLogsService(ids);
+
+    return res.status(200).json({
+      message: "Maintenance logs deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};

@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", ctrl.create);
 router.get("/", ctrl.getAll);
+router.delete("/", ctrl.deleteMany);
 router.get("/:id", ctrl.getById);
 router.put("/:id", ctrl.update);
 router.delete("/:id", ctrl.remove);
@@ -46,6 +47,37 @@ router.delete("/:id", ctrl.remove);
  *     responses:
  *       201:
  *         description: Part created
+ *   delete:
+ *     summary: Delete multiple parts
+ *     tags: [Parts]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["uuid1", "uuid2", "uuid3"]
+ *     responses:
+ *       200:
+ *         description: Parts deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 deletedCount:
+ *                   type: number
+ *       400:
+ *         description: Bad request
  *
  * /api/parts/{id}:
  *   get:

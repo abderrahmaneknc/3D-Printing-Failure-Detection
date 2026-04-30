@@ -57,3 +57,20 @@ export const deleteTag: RequestHandler<IdParam> = async (req, res) => {
     handleError(res, error);
   }
 };
+
+export const deleteManyTags: RequestHandler = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    const result = await service.deleteManyTagsService(ids);
+
+    return res.status(200).json({
+      message: "Tags deleted successfully",
+      deletedCount: result.count,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
