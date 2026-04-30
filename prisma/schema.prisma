@@ -48,17 +48,22 @@ enum MaterialType {
   ASA
 }
 
+enum PrinterSelectionMode {
+  NEXT_AVAILABLE_WITH_SPECIFIC_TAG
+  SPECIFIC_PRINTER
+}
+
 model Printer {
   id             String        @id @default(uuid())
   name           String
   model          String
+  printerType    String
   status         PrinterStatus
   ipAddress      String
   nozzleDiameter Float
   bedTemp        Float
   nozzleTemp     Float
   cameraLink     String
-  printerType    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -91,21 +96,22 @@ model PrinterTag {
 model CommandLog {
   id        String        @id @default(uuid())
   printerId String
-  commandId String        @unique
+  commandId String?       
+  rawCommand String  
   response  String?
   status    CommandStatus
 
   createdAt DateTime @default(now())
 
   printer      Printer      @relation(fields: [printerId], references: [id])
-  gcodeCommand GcodeCommand @relation(fields: [commandId], references: [id])
+  gcodeCommand GcodeCommand? @relation(fields: [commandId], references: [id])
 }
 
 model GcodeCommand {
   id         String      @id @default(uuid())
   name       String
   command    String
-  commandLog CommandLog?
+  commandLogs CommandLog[]
 }
 
 model MaintenanceLog {
@@ -122,20 +128,20 @@ model MaintenanceLog {
 
 model PrintJob {
   id        String @id @default(uuid())
-  printerId String
+  printerId String?
   fileId    String
-
+  profileId String?
   status   JobStatus
   progress Int
-
   startedAt     DateTime?
   finishedAt    DateTime?
   estimatedTime Int?
-
+  printerSelectionMode PrinterSelectionMode
+  queuePosition Int
+  requiredTagIds String[]
   createdAt DateTime @default(now())
-
-  printer  Printer           @relation(fields: [printerId], references: [id])
-  profiles FilamentProfile[]
+  printer  Printer?           @relation(fields: [printerId], references: [id])
+  profile   FilamentProfile? @relation(fields: [profileId], references: [id])
   part     Part              @relation(fields: [fileId], references: [id])
 }
 

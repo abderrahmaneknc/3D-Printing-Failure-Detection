@@ -7,7 +7,15 @@ export const createPrinter = (data: Prisma.PrinterCreateInput) => {
 
 export const getPrinters = () => {
   return prisma.printer.findMany({
-    include: { tags: true },
+    include: {
+      tags: true,
+      jobs: {
+        include: {
+          part: true,
+          profile: true,
+        },
+      },
+    },
   });
 };
 
@@ -16,17 +24,52 @@ export const getPrinterById = (id: string) => {
     where: { id },
     include: {
       tags: true,
-      jobs: true,
+      jobs: {
+        include: {
+          part: true,
+          profile: true,
+        },
+      },
       commandLogs: true,
       maintenanceLogs: true,
     },
   });
 };
 
-export const updatePrinter = (id: string, data: Prisma.PrinterUpdateInput) => {
-  return prisma.printer.update({
-    where: { id },
-    data,
+// export const updatePrinter = (id: string, data: Prisma.PrinterUpdateInput) => {
+//   return prisma.printer.update({
+//     where: { id },
+//     data,
+//   });
+// };
+export const updatePrinter = async (id: string, data: any) => {
+  const { tags, ...printerData } = data;
+
+  return prisma.$transaction(async (tx) => {
+    // 1. update printer WITHOUT tags
+    const printer = await tx.printer.update({
+      where: { id },
+      data: printerData,
+    });
+
+    // 2. replace tags manually
+    if (Array.isArray(tags)) {
+      await tx.printerTag.deleteMany({
+        where: { printerId: id },
+      });
+
+      await tx.printerTag.createMany({
+        data: tags.map((t) => ({
+          printerId: id,
+          tagId: t.tagId,
+        })),
+      });
+    }
+
+    return tx.printer.findUnique({
+      where: { id },
+      include: { tags: true },
+    });
   });
 };
 

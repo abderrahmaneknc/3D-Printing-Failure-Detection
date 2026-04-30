@@ -1,34 +1,104 @@
 import { prisma } from "../../lib/prisma";
 
 interface CreatePrintJobInput {
-  printerId: string;
   fileId: string;
+
+  // Only required for SPECIFIC_PRINTER
+  printerId?: string | null;
+
+  profileId?: string | null;
+
+  printerSelectionMode: "NEXT_AVAILABLE_WITH_SPECIFIC_TAG" | "SPECIFIC_PRINTER";
+
+  // Used only for NEXT_AVAILABLE_WITH_SPECIFIC_TAG
+  requiredTagIds?: string[];
+
+  estimatedTime?: number | null;
+
+  createdAt?: string;
+
+  queuePosition?: number;
+
   [key: string]: unknown;
 }
-
 export const createPrintJob = async (data: CreatePrintJobInput) => {
-  const printer = await prisma.printer.findUnique({
-    where: { id: data.printerId },
-  });
-  if (!printer) throw new Error("Printer not found");
-
+  // Validate file
   const part = await prisma.part.findUnique({
     where: { id: data.fileId },
   });
-  if (!part) throw new Error("Part not found");
+
+  if (!part) {
+    throw new Error("Part not found");
+  }
+
+  // SPECIFIC_PRINTER mode → must have printer
+  if (data.printerSelectionMode === "SPECIFIC_PRINTER") {
+    if (!data.printerId) {
+      throw new Error("Printer is required in SPECIFIC_PRINTER mode");
+    }
+
+    const printer = await prisma.printer.findUnique({
+      where: { id: data.printerId },
+    });
+
+    if (!printer) {
+      throw new Error("Printer not found");
+    }
+  }
+
+  // NEXT_AVAILABLE_WITH_SPECIFIC_TAG → must have tags
+  if (data.printerSelectionMode === "NEXT_AVAILABLE_WITH_SPECIFIC_TAG") {
+    if (!data.requiredTagIds || data.requiredTagIds.length === 0) {
+      throw new Error("At least one tag is required");
+    }
+  }
 
   return prisma.printJob.create({
     data: {
-      ...data,
+      fileId: data.fileId,
+
+      // RULE:
+      // SPECIFIC_PRINTER → set printer
+      // NEXT_AVAILABLE → null
+      printerId:
+        data.printerSelectionMode === "SPECIFIC_PRINTER"
+          ? data.printerId
+          : null,
+
+      profileId: data.profileId ?? null,
+
+      printerSelectionMode: data.printerSelectionMode,
+
+      estimatedTime: data.estimatedTime ?? null,
+
+      createdAt: new Date(),
+
+      queuePosition: data.queuePosition ?? 0,
+
       status: "QUEUED",
       progress: 0,
+      startedAt: null,
+      finishedAt: null,
+
+      // ✅ JUST STORE IDS (NO CONNECT)
+      requiredTagIds:
+        data.printerSelectionMode === "NEXT_AVAILABLE_WITH_SPECIFIC_TAG"
+          ? (data.requiredTagIds ?? [])
+          : [],
     },
   });
 };
 
 export const getPrintJobs = () => {
   return prisma.printJob.findMany({
-    include: { printer: true, part: true, profiles: true },
+    orderBy: {
+      queuePosition: "asc",
+    },
+    include: {
+      printer: true,
+      part: true,
+      profile: true,
+    },
   });
 };
 
@@ -42,7 +112,8 @@ export const getPrintJobById = (id: string) => {
 export const startPrintJob = async (id: string) => {
   const job = await prisma.printJob.findUnique({ where: { id } });
   if (!job) throw new Error("Job not found");
-  if (job.status !== "QUEUED") throw new Error("Only queued jobs can be started");
+  if (job.status !== "QUEUED")
+    throw new Error("Only queued jobs can be started");
 
   await prisma.printer.update({
     where: { id: job.printerId },
@@ -62,7 +133,8 @@ export const updateProgress = async (id: string, progress: number) => {
 
   const job = await prisma.printJob.findUnique({ where: { id } });
   if (!job) throw new Error("Job not found");
-  if (job.status !== "PRINTING") throw new Error("Job is not currently printing");
+  if (job.status !== "PRINTING")
+    throw new Error("Job is not currently printing");
 
   const isDone = progress === 100;
 
@@ -86,7 +158,8 @@ export const updateProgress = async (id: string, progress: number) => {
 export const pauseJob = async (id: string) => {
   const job = await prisma.printJob.findUnique({ where: { id } });
   if (!job) throw new Error("Job not found");
-  if (job.status !== "PRINTING") throw new Error("Only printing jobs can be paused");
+  if (job.status !== "PRINTING")
+    throw new Error("Only printing jobs can be paused");
 
   await prisma.printer.update({
     where: { id: job.printerId },
@@ -102,7 +175,8 @@ export const pauseJob = async (id: string) => {
 export const resumeJob = async (id: string) => {
   const job = await prisma.printJob.findUnique({ where: { id } });
   if (!job) throw new Error("Job not found");
-  if (job.status !== "PAUSED") throw new Error("Only paused jobs can be resumed");
+  if (job.status !== "PAUSED")
+    throw new Error("Only paused jobs can be resumed");
 
   await prisma.printer.update({
     where: { id: job.printerId },
@@ -133,7 +207,7 @@ export const cancelJob = async (id: string) => {
     where: { id },
     data: { status: "CANCELLED", finishedAt: new Date() },
   });
-};  
+};
 
 export const failJob = async (id: string) => {
   const job = await prisma.printJob.findUnique({ where: { id } });

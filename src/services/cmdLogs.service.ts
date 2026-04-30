@@ -1,20 +1,25 @@
 import { prisma } from "../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
-export const createCommandLog = async (data: Prisma.CommandLogCreateInput) => {
-  const printer = await prisma.printer.findUnique({
-    where: { id: data.printer.connect?.id },
-  });
-  if (!printer) throw new Error("Printer not found");
-
-  const command = await prisma.gcodeCommand.findUnique({
-    where: { id: data.gcodeCommand.connect?.id },
-  });
-  if (!command) throw new Error("Gcode command not found");
-
+export const createCommandLog = async (data: any) => {
   return prisma.commandLog.create({
-    data,
-    include: { printer: true, gcodeCommand: true },
+    data: {
+      printer: {
+        connect: { id: data.printer.connect.id },
+      },
+
+      ...(data.gcodeCommand?.connect?.id
+        ? {
+            gcodeCommand: {
+              connect: { id: data.gcodeCommand.connect.id },
+            },
+          }
+        : {}),
+
+      rawCommand: data.rawCommand,
+      status: data.status,
+      response: data.response,
+    },
   });
 };
 
@@ -41,7 +46,10 @@ export const getCommandLogsByPrinter = async (printerId: string) => {
   });
 };
 
-export const updateCommandLog = async (id: string, data: Prisma.CommandLogUpdateInput) => {
+export const updateCommandLog = async (
+  id: string,
+  data: Prisma.CommandLogUpdateInput,
+) => {
   const log = await prisma.commandLog.findUnique({ where: { id } });
   if (!log) throw new Error("Command log not found");
 
