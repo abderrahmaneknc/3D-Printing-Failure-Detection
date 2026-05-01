@@ -6,6 +6,122 @@ datasource db {
   provider = "postgresql"
 }
 
+model Printer {
+  id              String           @id @default(uuid())
+  name            String
+  model           String
+  status          PrinterStatus
+  ipAddress       String
+  nozzleDiameter  Float
+  bedTemp         Float
+  nozzleTemp      Float
+  cameraLink      String
+  printerType     String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  commandLogs     CommandLog[]
+  maintenanceLogs MaintenanceLog[]
+  jobs            PrintJob[]
+  tags            PrinterTag[]
+}
+
+model Tag {
+  id       String       @id @default(uuid())
+  name     String
+  color    String?
+  printers PrinterTag[]
+}
+
+model PrinterTag {
+  printerId String
+  tagId     String
+  printer   Printer @relation(fields: [printerId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([printerId, tagId])
+}
+
+model CommandLog {
+  id           String        @id @default(uuid())
+  printerId    String
+  commandId    String?
+  response     String?
+  status       CommandStatus
+  createdAt    DateTime      @default(now())
+  rawCommand   String
+  gcodeCommand GcodeCommand? @relation(fields: [commandId], references: [id])
+  printer      Printer       @relation(fields: [printerId], references: [id])
+}
+
+model GcodeCommand {
+  id          String       @id @default(uuid())
+  name        String
+  command     String
+  commandLogs CommandLog[]
+}
+
+model MaintenanceLog {
+  id          String          @id @default(uuid())
+  printerId   String
+  type        MaintenanceType
+  description String
+  cost        Float?
+  createdAt   DateTime        @default(now())
+  printer     Printer         @relation(fields: [printerId], references: [id])
+}
+
+model PrintJob {
+  id                   String               @id @default(uuid())
+  printerId            String?
+  fileId               String
+  status               JobStatus
+  progress             Int
+  startedAt            DateTime?
+  finishedAt           DateTime?
+  estimatedTime        Int?
+  createdAt            DateTime             @default(now())
+  printerSelectionMode PrinterSelectionMode
+  profileId            String?
+  queuePosition        Int
+  requiredTagIds       String[]
+  part                 Part                 @relation(fields: [fileId], references: [id])
+  printer              Printer?             @relation(fields: [printerId], references: [id])
+  FilamentProfile      FilamentProfile?     @relation(fields: [profileId], references: [id])
+}
+
+model Part {
+  id             String     @id @default(uuid())
+  image          String
+  title          String
+  duration       Int
+  nozzleDiameter Float
+  filamentUsed   Float
+  createdAt      DateTime   @default(now())
+  fileUrl        String?
+  printJobs      PrintJob[]
+}
+
+model FilamentProfile {
+  id        String       @id @default(uuid())
+  material  MaterialType
+  name      String
+  color     String
+  roleSize  Float
+  inventory Inventory[]
+  PrintJob  PrintJob[]
+}
+
+model Inventory {
+  id          String          @id @default(uuid())
+  orderNumber String
+  updateType  InventoryType
+  quantity    Int
+  totalCost   Float?
+  date        DateTime
+  profileId   String
+  profile     FilamentProfile @relation(fields: [profileId], references: [id])
+}
+
 enum PrinterStatus {
   IDLE
   PRINTING
@@ -48,130 +164,7 @@ enum MaterialType {
   ASA
 }
 
-model Printer {
-  id             String        @id @default(uuid())
-  name           String
-  model          String
-  status         PrinterStatus
-  ipAddress      String
-  nozzleDiameter Float
-  bedTemp        Float
-  nozzleTemp     Float
-  cameraLink     String
-  printerType    String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // relations
-  commandLogs     CommandLog[]
-  maintenanceLogs MaintenanceLog[]
-  jobs            PrintJob[]
-  tags            PrinterTag[]
-}
-
-model Tag {
-  id    String  @id @default(uuid())
-  name  String
-  color String?
-
-  printers PrinterTag[]
-}
-
-model PrinterTag {
-  printerId String
-  tagId     String
-
-  printer Printer @relation(fields: [printerId], references: [id])
-  tag     Tag     @relation(fields: [tagId], references: [id])
-
-  @@id([printerId, tagId])
-}
-
-model CommandLog {
-  id        String        @id @default(uuid())
-  printerId String
-  commandId String        @unique
-  response  String?
-  status    CommandStatus
-
-  createdAt DateTime @default(now())
-
-  printer      Printer      @relation(fields: [printerId], references: [id])
-  gcodeCommand GcodeCommand @relation(fields: [commandId], references: [id])
-}
-
-model GcodeCommand {
-  id         String      @id @default(uuid())
-  name       String
-  command    String
-  commandLog CommandLog?
-}
-
-model MaintenanceLog {
-  id          String          @id @default(uuid())
-  printerId   String
-  type        MaintenanceType
-  description String
-  cost        Float?
-
-  createdAt DateTime @default(now())
-
-  printer Printer @relation(fields: [printerId], references: [id])
-}
-
-model PrintJob {
-  id        String @id @default(uuid())
-  printerId String
-  fileId    String
-
-  status   JobStatus
-  progress Int
-
-  startedAt     DateTime?
-  finishedAt    DateTime?
-  estimatedTime Int?
-
-  createdAt DateTime @default(now())
-
-  printer  Printer           @relation(fields: [printerId], references: [id])
-  profiles FilamentProfile[]
-  part     Part              @relation(fields: [fileId], references: [id])
-}
-
-model Part {
-  id             String  @id @default(uuid())
-  image          String
-  title          String
-  duration       Int
-  nozzleDiameter Float
-  filamentUsed   Float
-  fileUrl        String?  
-
-  createdAt DateTime   @default(now())
-  printJobs PrintJob[]
-}
-
-model FilamentProfile {
-  id       String       @id @default(uuid())
-  material MaterialType
-  name     String
-  color    String
-  roleSize Float
-
-  jobs      PrintJob[]
-  inventory Inventory[]
-}
-
-model Inventory {
-  id          String        @id @default(uuid())
-  orderNumber String
-  updateType  InventoryType
-  quantity    Int
-  totalCost   Float?
-
-  date DateTime
-
-  profileId String
-  profile   FilamentProfile @relation(fields: [profileId], references: [id])
+enum PrinterSelectionMode {
+  NEXT_AVAILABLE_WITH_SPECIFIC_TAG
+  SPECIFIC_PRINTER
 }

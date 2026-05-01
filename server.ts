@@ -1,17 +1,27 @@
 import app from "./app";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger";
+import express from "express";
 import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
-app.use(cors({
-  origin: "*", // later you can restrict to your frontend URL
-}));
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  explorer: true,
-  customSiteTitle: "3D Printing API Docs",
-}));
+// 👇 PUT IT HERE (after app is created, before routes)
+app.use("/uploads", express.static("uploads"));
+app.use(
+  cors({
+    origin: "*", // later you can restrict to your frontend URL
+  }),
+);
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customSiteTitle: "3D Printing API Docs",
+  }),
+);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
