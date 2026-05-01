@@ -115,6 +115,7 @@ export const startPrintJob = async (id: string) => {
   if (job.status !== "QUEUED")
     throw new Error("Only queued jobs can be started");
 if (!job.printerId) throw new Error("Cannot start a job without an assigned printer");
+
   await prisma.printer.update({
     where: { id: job.printerId },
     data: { status: "PRINTING" },
@@ -161,6 +162,7 @@ export const pauseJob = async (id: string) => {
   if (job.status !== "PRINTING")
     throw new Error("Only printing jobs can be paused");
 if (!job.printerId) throw new Error("Cannot start a job without an assigned printer");
+
   await prisma.printer.update({
     where: { id: job.printerId },
     data: { status: "PAUSED" },
@@ -178,6 +180,7 @@ export const resumeJob = async (id: string) => {
   if (job.status !== "PAUSED")
     throw new Error("Only paused jobs can be resumed");
 if (!job.printerId) throw new Error("Cannot start a job without an assigned printer");
+
   await prisma.printer.update({
     where: { id: job.printerId },
     data: { status: "PRINTING" },
