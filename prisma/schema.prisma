@@ -146,7 +146,7 @@ model Part {
   duration       Int
   nozzleDiameter Float
   filamentUsed   Float
-  fileUrl        String?
+  fileUrl        String?  
 
   createdAt DateTime   @default(now())
   printJobs PrintJob[]

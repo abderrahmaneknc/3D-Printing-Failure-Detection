@@ -37,12 +37,13 @@ router.delete("/:id", ctrl.remove);
  *         application/json:
  *           schema:
  *             type: object
- *             required: [image, title, duration, nozzleDiameter, filamentUsed]
+ *             required: [image, title, duration, nozzleDiameter, fileUrl, filamentUsed]
  *             properties:
  *               image: { type: string, example: "https://example.com/bracket.png" }
  *               title: { type: string, example: "Bracket v1" }
  *               duration: { type: integer, example: 120 }
  *               nozzleDiameter: { type: number, example: 0.4 }
+ *               fileUrl: { type: string, example: "https://example.com/bracket.stl" }
  *               filamentUsed: { type: number, example: 15.5 }
  *     responses:
  *       201:
